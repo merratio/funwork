@@ -1,7 +1,26 @@
 #include<stdio.h>
 #define MAX 23
+int front = -1;
+int rear = -1;
 
 void coustomerInformation();
+void enQueue();
+void deQueue();
+
+typedef struct cusInfo
+{
+    char cusFirstName[20];
+    char cusLastName[20];
+    char lisPlatNum[8];
+
+    struct transDate
+    {
+        int dd;
+        int mm;
+        int yy;
+    }DOB;   
+
+}CUS;
 
 int main(void)
 {
@@ -18,20 +37,15 @@ int main(void)
 
 }
 
-typedef struct cusInfo
-{
-    char cusFirstName[20];
-    char cusLastName[20];
-    char lisPlatNum[8];
+void enQueue(){
+    CUS coustomer[MAX];
+    printf("Enter first name: ");
+    
 
-    struct transDate
-    {
-        int dd;
-        int mm;
-        int yy;
-    }DOB;   
 
-}CUS;
+}
+
+
 
 
 
