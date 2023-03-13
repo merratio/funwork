@@ -1,5 +1,8 @@
 #include<stdio.h>
+#include<string.h>
 #define MAX 23
+
+
 int front = -1;
 int rear = -1;
 
@@ -38,11 +41,23 @@ int main(void)
 }
 
 void enQueue(){
+    char fname[10];
     CUS coustomer[MAX];
+
+
     printf("Enter first name: ");
+    scanf("%s",fname);
     
-
-
+    
+    if(rear == MAX - 1){
+        printf("car wash is full.");
+    }
+    else{
+        if(front == -1)
+        front = 0;
+        rear++;
+        strcpy(coustomer[rear].cusFirstName,fname);
+    }
 }
 
 
