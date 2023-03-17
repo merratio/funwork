@@ -41,12 +41,15 @@ int main(void)
 }
 
 void enQueue(){
-    char fname[10];
+    char fname[10],lname[10];
     CUS coustomer[MAX];
 
 
     printf("Enter first name: ");
     scanf("%s",fname);
+
+    printf("Enter last name: ");
+    scanf("%s",lname);
     
     
     if(rear == MAX - 1){
@@ -57,6 +60,20 @@ void enQueue(){
         front = 0;
         rear++;
         strcpy(coustomer[rear].cusFirstName,fname);
+        strcpy(coustomer[rear].cusLastName,lname);
+
+        printf("Enter coustomer's date of birth(dd/mm/yy): ");
+        scanf("%d%d%d",&coustomer[rear].DOB.dd,&coustomer[rear].DOB.mm,&coustomer[rear].DOB.yy);
+
+        printf("Enter coustomers plate number: ");
+        scanf("%s",coustomer[rear].lisPlatNum);
+
+        FILE * fpointer;
+        fpointer = fopen("carwash.txt", "w");
+        fclose;
+
+        
+
     }
 }
 
