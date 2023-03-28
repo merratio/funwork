@@ -92,20 +92,4 @@ void coustomerInformation(){
     
     
 }
-void displayReturningCustomers(char firstNames[][50], char lastNames[][50], char licensePlates[][10], int visits[], int numCustomers){
-    int numReturningCustomers = 0;
 
-     for (int i = 0; i < numCustomers; i++){
-          if (visits[i] > 1){
-            printf("%s %s %s\n", firstNames[i], lastNames[i], licensePlates[i]);
-            numReturningCustomers++;
-          }
-     }
-
-     if (numReturningCustomers == 0){
-        printf("No returning customers today.\n");
-     }else{
-        printf("Total number of returning customers: %d\n", numReturningCustomers);
-     }
-
-}
