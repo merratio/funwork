@@ -14,9 +14,6 @@
 #define MAX 23
 #define SECOND 20
 
-// Initialize front and rear indices with -1 values
-int front = -1;
-int rear = -1;
 
 // Declare function prototypes
 void customerInformation();
@@ -29,6 +26,7 @@ typedef struct cusInfo
     char cusFirstName[20];
     char cusLastName[20];
     char lisPlatNum[8];
+    char servicesRequired[7];
 
     // Define a struct within 'cusInfo' struct for storing date of birth information
     struct transDate
@@ -37,6 +35,9 @@ typedef struct cusInfo
         int mm;
         int yy;
     }DOB;   
+
+    int paymentMethod;
+
 }CUS;
 
 //Creating a variable of type enum boolean named washFull
@@ -68,60 +69,59 @@ int main(void)
 void customerInformation(){
     int tip, tipPercentage;
     int numberofCustomers = 0;
-    CUS coustomer[MAX];
+    CUS coustomer;
+    CUS *coustomerptr;
+
+    coustomerptr = &coustomer;
 
 
     srand(time(NULL));
 
     while(numberofCustomers < 23){
 
-    // Prompt user for first name and store in variable 'fname'
-    printf("Enter first name: ");
-    scanf("%s",coustomer[numberofCustomers].cusFirstName);
+        // Prompt user for first name and store in variable 'fname'
+        printf("Enter first name: ");
+        scanf("%s",coustomerptr->cusFirstName);
 
-    // Prompt user for last name and store in variable 'lname'
-    printf("Enter last name: ");
-    scanf("%s",coustomer[numberofCustomers].cusLastName);
-    
-    // Check if the queue is full, i.e. rear has reached the MAX limit
-    /*if(rear == MAX - 1){
-        printf("car wash is full.");
-    }
-    else{
-        // Update the front and rear indices of the queue
-        if(front == -1)
-        front = 0;
-        rear++;
-
-    
+        // Prompt user for last name and store in variable 'lname'
+        printf("Enter last name: ");
+        scanf("%s",coustomerptr->cusLastName);
         
-        // Copy customer's first and last name to the 'coustomer' array at the rear index 
-        strcpy(coustomer[rear].cusFirstName,fname);
-        strcpy(coustomer[rear].cusLastName,lname);
-        */
+        
 
         // Prompt user for customer's date of birth and store in 'coustomer' array
         printf("Enter coustomer's date of birth(dd/mm/yy): ");
-        scanf("%d%d%d",&coustomer[numberofCustomers].DOB.dd,&coustomer[numberofCustomers].DOB.mm,&coustomer[numberofCustomers].DOB.yy);
+        scanf("%d%d%d",&coustomerptr->DOB.dd,&coustomerptr->DOB.mm,&coustomerptr->DOB.yy);
 
         // Prompt user for customer's plate number and store in 'coustomer' array
         printf("Enter coustomers plate number: ");
-        scanf("%s",coustomer[numberofCustomers].lisPlatNum);
+        scanf("%s",coustomerptr->lisPlatNum);
+
+        printf("What is the preffered mode of payment\n1. Cash\n.2 Credit\n");
+        scanf("%d",coustomerptr->paymentMethod);
+
+        if(coustomerptr->paymentMethod == 1){
+            printf("payment method: Cash");
+        }
+        else if(coustomerptr->paymentMethod == 2){
+            printf("payment method: Credit");
+        }
 
         // Open a file named 'carwash.txt' for writing customer information
         FILE * fpointer;
         fpointer = fopen("carwash.txt", "a");
-        fwrite(coustomer, sizeof(CUS), 1, fpointer);
+        fwrite(&coustomer, sizeof(CUS), 1, fpointer);
         fclose;
 
         printf("Does the customer wish to give a tip?\n");
         tip = 1 + rand() % 2;
+        printf("%d\n", tip);
 
         if(tip == 1){
             printf("What is the tip percentage: ");
             scanf("%d", &tipPercentage);
         }
-        
+            
 
         numberofCustomers++;
 
