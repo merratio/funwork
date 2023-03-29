@@ -221,8 +221,8 @@ void wash(){
             if(response=='Y'){
                 
                 //Retrieving data from the user
-                printf("Enter the license plate number of the car you wish to be washed: ");
-                scanf("%s",licensePlate[car]);
+                //printf("Enter the license plate number of the car you wish to be washed: ");
+                //scanf("%s",licensePlate[car]);
 
                 printf("You have added a car to the car wash\n\n");
 
@@ -238,6 +238,11 @@ void wash(){
                     washFull = True;
                 }
 
+            }
+
+            if(counter==23){
+
+                printf("All the cars that were waiting to be washed have been washed\n\n");
             }
 
             // Testing to see if the number of cars in the wash bay is at it's max capacity
