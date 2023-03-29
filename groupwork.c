@@ -7,6 +7,7 @@
 #include<stdio.h>
 #include<time.h>
 #include<string.h>
+#include<stdlib.h>
 
 
 // Define the maximum length of the customer queue to be 23
@@ -18,9 +19,7 @@ int front = -1;
 int rear = -1;
 
 // Declare function prototypes
-void coustomerInformation();
-void enQueue();
-void deQueue();
+void customerInformation();
 void searchReturningCustomers();
 void wash();
 
@@ -60,23 +59,32 @@ int main(void)
     printf("Buffing\t$5500.00\n");
     printf("RoofCleaning\t$3200.00\n");
     printf("Detailing/InteriorShampooing\t$7500.00\n");
+
+
+    customerInformation();
 }
 
 // Function to add new customers to the queue
-void enQueue(){
-    char fname[10],lname[10];
+void customerInformation(){
+    int tip, tipPercentage;
+    int numberofCustomers = 0;
     CUS coustomer[MAX];
+
+
+    srand(time(NULL));
+
+    while(numberofCustomers < 23){
 
     // Prompt user for first name and store in variable 'fname'
     printf("Enter first name: ");
-    scanf("%s",fname);
+    scanf("%s",coustomer[numberofCustomers].cusFirstName);
 
     // Prompt user for last name and store in variable 'lname'
     printf("Enter last name: ");
-    scanf("%s",lname);
+    scanf("%s",coustomer[numberofCustomers].cusLastName);
     
     // Check if the queue is full, i.e. rear has reached the MAX limit
-    if(rear == MAX - 1){
+    /*if(rear == MAX - 1){
         printf("car wash is full.");
     }
     else{
@@ -84,34 +92,42 @@ void enQueue(){
         if(front == -1)
         front = 0;
         rear++;
+
+    
         
         // Copy customer's first and last name to the 'coustomer' array at the rear index 
         strcpy(coustomer[rear].cusFirstName,fname);
         strcpy(coustomer[rear].cusLastName,lname);
+        */
 
         // Prompt user for customer's date of birth and store in 'coustomer' array
         printf("Enter coustomer's date of birth(dd/mm/yy): ");
-        scanf("%d%d%d",&coustomer[rear].DOB.dd,&coustomer[rear].DOB.mm,&coustomer[rear].DOB.yy);
+        scanf("%d%d%d",&coustomer[numberofCustomers].DOB.dd,&coustomer[numberofCustomers].DOB.mm,&coustomer[numberofCustomers].DOB.yy);
 
         // Prompt user for customer's plate number and store in 'coustomer' array
         printf("Enter coustomers plate number: ");
-        scanf("%s",coustomer[rear].lisPlatNum);
+        scanf("%s",coustomer[numberofCustomers].lisPlatNum);
 
         // Open a file named 'carwash.txt' for writing customer information
         FILE * fpointer;
-        fpointer = fopen("carwash.txt", "w");
+        fpointer = fopen("carwash.txt", "a");
+        fwrite(coustomer, sizeof(CUS), 1, fpointer);
         fclose;
-    }
-}
 
-// Function to gather transaction information from existing customers
-void coustomerInformation(){
-    CUS coustomer[MAX];
-    for (int i = 0; i < MAX; i++)
-    {
-        // Prompt user for customer's transaction date and store in 'coustomer' array
-        printf("Enter transaction date: ");
-        scanf("%d/%d/%d", &coustomer[i].DOB.dd, &coustomer[i].DOB.mm, &coustomer[i].DOB.yy);
+        printf("Does the customer wish to give a tip?\n");
+        tip = 1 + rand() % 2;
+
+        if(tip == 1){
+            printf("What is the tip percentage: ");
+            scanf("%d", &tipPercentage);
+        }
+        
+
+        numberofCustomers++;
+
+        if(numberofCustomers == 23){
+            printf("Car wash is full");
+        }
     }
 }
 
