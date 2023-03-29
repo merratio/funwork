@@ -10,6 +10,14 @@
 #include<stdlib.h>
 
 
+//global variables
+int washCount = 0;
+int engineCount = 0;
+int polishCount = 0;
+int buffCount = 0;
+int roofCount = 0;
+int detailCount = 0;
+
 // Define the maximum length of the customer queue to be 23
 #define MAX 23
 #define SECOND 20
@@ -19,6 +27,7 @@
 void customerInformation();
 void searchReturningCustomers();
 void wash();
+void displaySalesReport();
 
 // Define a struct for storing customer information
 typedef struct cusInfo
@@ -26,7 +35,7 @@ typedef struct cusInfo
     char cusFirstName[20];
     char cusLastName[20];
     char lisPlatNum[8];
-    char servicesRequired[7];
+    int servicesRequired;
 
     // Define a struct within 'cusInfo' struct for storing date of birth information
     struct transDate
@@ -34,7 +43,7 @@ typedef struct cusInfo
         int dd;
         int mm;
         int yy;
-    }DOB;   
+    }TD;   
 
     int paymentMethod;
 
@@ -65,10 +74,11 @@ int main(void)
     customerInformation();
 }
 
-// Function to add new customers to the queue
+// Function to add new customers to the car wash
 void customerInformation(){
-    int tip, tipPercentage;
+    int tip, tipPercentage, integer;
     int numberofCustomers = 0;
+    float cost, totalCost = 0;
     CUS coustomer;
     CUS *coustomerptr;
 
@@ -77,59 +87,130 @@ void customerInformation(){
 
     srand(time(NULL));
 
-    while(numberofCustomers < 23){
+    printf("Enter any integer to start program: ");
+    scanf("%d",&integer);
 
-        // Prompt user for first name and store in variable 'fname'
-        printf("Enter first name: ");
-        scanf("%s",coustomerptr->cusFirstName);
-
-        // Prompt user for last name and store in variable 'lname'
-        printf("Enter last name: ");
-        scanf("%s",coustomerptr->cusLastName);
-        
-        
-
-        // Prompt user for customer's date of birth and store in 'coustomer' array
-        printf("Enter coustomer's date of birth(dd/mm/yy): ");
-        scanf("%d%d%d",&coustomerptr->DOB.dd,&coustomerptr->DOB.mm,&coustomerptr->DOB.yy);
-
-        // Prompt user for customer's plate number and store in 'coustomer' array
-        printf("Enter coustomers plate number: ");
-        scanf("%s",coustomerptr->lisPlatNum);
-
-        printf("What is the preffered mode of payment\n1. Cash\n.2 Credit\n");
-        scanf("%d",coustomerptr->paymentMethod);
-
-        if(coustomerptr->paymentMethod == 1){
-            printf("payment method: Cash");
-        }
-        else if(coustomerptr->paymentMethod == 2){
-            printf("payment method: Credit");
-        }
-
-        // Open a file named 'carwash.txt' for writing customer information
-        FILE * fpointer;
-        fpointer = fopen("carwash.txt", "a");
-        fwrite(&coustomer, sizeof(CUS), 1, fpointer);
-        fclose;
-
-        printf("Does the customer wish to give a tip?\n");
-        tip = 1 + rand() % 2;
-        printf("%d\n", tip);
-
-        if(tip == 1){
-            printf("What is the tip percentage: ");
-            scanf("%d", &tipPercentage);
-        }
-            
-
-        numberofCustomers++;
+    while(integer !=-1){
 
         if(numberofCustomers == 23){
             printf("Car wash is full");
+            break;
         }
+        else{
+            // Prompt user for first name and store in variable 'fname'
+            printf("Enter first name: ");
+            scanf("%s",coustomerptr->cusFirstName);
+
+            // Prompt user for last name and store in variable 'lname'
+            printf("Enter last name: ");
+            scanf("%s",coustomerptr->cusLastName);
+        
+
+            // Prompt user for customer's date of birth and store in 'coustomer' array
+            printf("Enter transaction date(dd/mm/yy): ");
+            scanf("%d%d%d",&coustomerptr->TD.dd,&coustomerptr->TD.mm,&coustomerptr->TD.yy);
+
+            // Prompt user for customer's plate number and store in 'coustomer' array
+            printf("Enter coustomers plate number: ");
+            scanf("%s",coustomerptr->lisPlatNum);
+
+            printf("1.WashandVacuum\n");
+            printf("2.EngineWash\n");
+            printf("3.Polishing\n");
+            printf("4.Buffing\n");
+            printf("5.RoofCleaning\n");
+            printf("6.Detailing/InteriorShampooing\n");
+
+            do{
+                printf("what are the service(s) needed by customers(enter -1 when finished choosing services): ");
+                scanf("%d",&coustomerptr->servicesRequired);
+
+                switch (coustomerptr->servicesRequired)
+                {
+                case 1:
+                    cost = 2500;
+                    washCount++;
+                    break;
+                case 2:
+                    cost = 2000;
+                    engineCount++;
+                    break;
+                case 3:
+                    cost = 3500;
+                    polishCount++;
+                    break;
+                case 4:
+                    cost = 5500;
+                    buffCount++;
+                    break;
+                case 5:
+                    cost = 3200;
+                    roofCount++;
+                    break;;
+                case 6:
+                    cost = 7500;
+                    detailCount++;
+                    break;
+                default:
+                    printf("Invalid service.\n");
+                    break;
+                }
+
+                totalCost += cost;
+
+            }while(coustomerptr->servicesRequired != -1);
+
+
+            printf("What is the preffered mode of payment\n1. Cash\n2. Credit\n");
+            scanf("%d",&coustomerptr->paymentMethod);
+
+            if(coustomerptr->paymentMethod == 1){
+                printf("payment method: Cash\n");
+                totalCost *= 1;
+            }
+            else if(coustomerptr->paymentMethod == 2){
+                printf("payment method: Credit\n");
+                totalCost *= 0.03;
+            }
+        
+
+            // Open a file named 'carwash.txt' for writing customer information
+            FILE * fpointer;
+            fpointer = fopen("carwash.txt", "a");
+            fwrite(&coustomer, sizeof(CUS), 1, fpointer);
+            fclose;
+
+            printf("Does the customer wish to give a tip?\n");
+            tip = 1 + rand() % 2;
+            printf("%d\n", tip);
+
+            if(tip == 1){
+                printf("What is the tip percentage: ");
+                scanf("%d", &tipPercentage);
+            }   
+            else{
+                tipPercentage = 0;
+            }   
+
+            numberofCustomers++;
+
+
+            printf("Customer name: %s %s\n", coustomerptr->cusFirstName, coustomerptr->cusLastName);
+            printf("Transaction date: %d/%d/%d\n",coustomerptr->TD.dd,coustomerptr->TD.mm, coustomerptr->TD.yy);
+            printf("license number: %s\n",coustomerptr->lisPlatNum);
+            printf("Total service costs: %.2f\n",totalCost);
+            printf("Tip percentage: %d\n", tipPercentage);
+            printf("Tip amount: %.2f\n",tipPercentage * totalCost);
+            printf("Grand total: %.2f\n",totalCost + (tipPercentage * totalCost));
+
+
+
+            printf("Enter any integer to start program(enter -1 to end): ");
+            scanf("%d",&integer);
+        }   
     }
-}
+}//end of function
+
 
 // Function to display returning customers 
 void searchReturningCustomers() {
@@ -147,7 +228,7 @@ void searchReturningCustomers() {
         while (!feof(fpointer)) {
             isReturningCustomer = 0; // Reset flag for each iteration
             // Read customer information from file and store in 'customer' array
-            fscanf(fpointer, "%s %s %d/%d/%d %s", customer[rear].cusFirstName, customer[rear].cusLastName, &customer[rear].DOB.dd, &customer[rear].DOB.mm, &customer[rear].DOB.yy, customer[rear].lisPlatNum);
+            fscanf(fpointer, "%s %s %d/%d/%d %s", customer[rear].cusFirstName, customer[rear].cusLastName, &customer[rear].TD.dd, &customer[rear].TD.mm, &customer[rear].TD.yy, customer[rear].lisPlatNum);
 
             // Check if the current customer is a returning customer by comparing plate numbers
             for (int i = 0; i < rear; i++) { // Start loop at 0 and end at rear - 1
@@ -265,4 +346,17 @@ void wash(){
         
         
     }
+}
+
+
+
+void displaySalesReport(){
+    printf("service totals\n");
+    printf("amount made from wash and vaccum: %.2f\n", washCount * 2500);
+    printf("amount made from engine wash: %.2f\n", engineCount * 2000);
+    printf("amount made from polishing: %.2f\n", polishCount * 3500);
+    printf("amount made from buffing %.2f\n", buffCount * 5500);
+    printf("amount made from roof cleaning: %.2f\n", roofCount * 3200);
+    printf("amount made from detailing/interior shampooing: %.2f\n", detailCount * 7500);
+  
 }
