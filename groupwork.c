@@ -349,7 +349,6 @@ void wash(){
 }
 
 
-
 void displaySalesReport(){
     printf("service totals\n");
     printf("amount made from wash and vaccum: %.2f\n", washCount * 2500);
