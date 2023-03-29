@@ -5,10 +5,13 @@
 
 // Include header file containing standard input/output functions and string manipulation functions
 #include<stdio.h>
+#include<time.h>
 #include<string.h>
+
 
 // Define the maximum length of the customer queue to be 23
 #define MAX 23
+#define SECOND 20
 
 // Initialize front and rear indices with -1 values
 int front = -1;
@@ -19,6 +22,7 @@ void coustomerInformation();
 void enQueue();
 void deQueue();
 void searchReturningCustomers();
+void wash();
 
 // Define a struct for storing customer information
 typedef struct cusInfo
@@ -35,6 +39,11 @@ typedef struct cusInfo
         int yy;
     }DOB;   
 }CUS;
+
+//Creating a variable of type enum boolean named washFull
+enum boolean{
+    True = 1, False = 0
+}washFull;
 
 // Main program
 int main(void)
@@ -142,5 +151,95 @@ void searchReturningCustomers() {
         }
 
         fclose(fpointer); // Close the file
+    }
+}
+
+void wash(){
+
+    // Declaration of variables
+    int car = 0, decide=1;
+    washFull = False;
+    char licensePlate[3][7];
+    time_t startTime = time(NULL);
+    
+    //Starting an infinite loop that will only exit when the user prompts it to
+    while(True&&decide==1){
+        
+        //Assigning values to the time variables 
+        time_t currentTime = time(NULL);
+        double elapsedTime = difftime(currentTime,startTime);
+
+        
+        // Testing to see if a certain amount of time has passed in order to remove a car from the wash bay
+        if(elapsedTime>= SECOND && car>0){
+
+            printf("A car has been removed from the car wash.\n\n");
+            car--;
+
+            // Assigning a new value to the variable startTime
+            startTime = currentTime;
+        }
+
+        // Testing to see if the washbay id not full
+        if(car<3){
+
+            char response;
+
+            //A do while loop used to ensure that rubbish data is not entered
+            do{
+                printf("There is space available in the car wash, would you like to add another car (Y/N): ");
+                scanf(" %c",&response);
+
+                //Converting the value entered by the user to uppercase
+                response = toupper(response);
+
+                //A test to see if the data entered was invalid 
+                if(response!='Y'&&response!='N'){
+
+                    printf("INVALID RESPONSE, PLEASE TRY AGAIN!!!!!!!\n\n");
+                }
+            
+            }while(response!='Y'&&response!='N'); //The block of code associated with this will run as long as these conditions are met
+
+            //Testing to see if the data entered is yes
+            if(response=='Y'){
+                
+                //Retrieving data from the user
+                printf("Enter the license plate number of the car you wish to be washed: ");
+                scanf("%s",licensePlate[car]);
+
+                printf("You have added a car to the car wash\n\n");
+
+                //Incrementing the value of the variable car by 1
+                car++;
+            }
+            else{
+                //Testing to see if the wash is full 
+                if(!washFull ){
+
+                    washFull = True;
+                }
+
+            }
+
+            // Testing to see if the number of cars in the wash bay is at it's max capacity
+            if(car>=3){
+                
+                printf("The wash bay is now full, please wait while a car is washed then removed....\n\n");
+            }
+
+            //Testing to see if the user wishes to exit the program
+            if(response=='N'){
+
+                //Equating the value of the variable decide to 0 as to exit the loop
+                decide = 0;
+
+                printf("Thank you for using this software to add cars to the wash bay of the car wash\n\n");
+            }
+
+
+        }
+        
+        
     }
 }
