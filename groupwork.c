@@ -157,13 +157,13 @@ void searchReturningCustomers() {
 void wash(){
 
     // Declaration of variables
-    int car = 0, decide=1;
+    int car = 0, decide=1, counter=0;
     washFull = False;
     char licensePlate[3][7];
     time_t startTime = time(NULL);
     
     //Starting an infinite loop that will only exit when the user prompts it to
-    while(True&&decide==1){
+    while(True&&decide==1&&counter<=23){
         
         //Assigning values to the time variables 
         time_t currentTime = time(NULL);
@@ -212,6 +212,8 @@ void wash(){
 
                 //Incrementing the value of the variable car by 1
                 car++;
+
+                counter++;
             }
             else{
                 //Testing to see if the wash is full 
