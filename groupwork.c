@@ -211,43 +211,71 @@ void customerInformation(){
     }
 }//end of function
 
+void searchReturningCustomers(){
+    //Struct variable to store customer information read from file
+    CUS coustomer;
 
-// Function to display returning customers 
-void searchReturningCustomers() {
-    int rear = 0; // Define the variable 'rear'
-    CUS customer[MAX];
-    int isReturningCustomer;
+    // Open the 'carwash.txt' file for reading 
+    FILE * fpointer;
+    fpointer = fopen("carwash.txt", "r");
 
-    // Open the file named 'carwash.txt' for reading and writing customer information
-    FILE *fpointer = fopen("carwash.txt", "r+");
+    int count = 0; // Variable to keep track of the number of returning customers found
 
-    if (fpointer == NULL) {
-        printf("Error opening file.");
-    } else {
-        // Read through the entire file until end of file is reached
-        while (!feof(fpointer)) {
-            isReturningCustomer = 0; // Reset flag for each iteration
-            // Read customer information from file and store in 'customer' array
-            fscanf(fpointer, "%s %s %d/%d/%d %s", customer[rear].cusFirstName, customer[rear].cusLastName, &customer[rear].TD.dd, &customer[rear].TD.mm, &customer[rear].TD.yy, customer[rear].lisPlatNum);
+    printf("\nReturning Customers:\n");
 
-            // Check if the current customer is a returning customer by comparing plate numbers
-            for (int i = 0; i < rear; i++) { // Start loop at 0 and end at rear - 1
-                if (strcmp(customer[i].lisPlatNum, customer[rear].lisPlatNum) == 0) {
-                    printf("%s %s is a returning customer\n", customer[rear].cusFirstName, customer[rear].cusLastName);
-                    isReturningCustomer = 1;
-                    break; // Break out of loop if a returning customer is found
+    // Read each customer record in the file
+    while(fread(&coustomer,sizeof(CUS),1,fpointer)==1){
+        // Loop through all customers again to find repeating entries
+        FILE * fpointer2;
+        fpointer2 = fopen("carwash.txt", "r");
+        CUS coustomer2;
+
+        while(fread(&coustomer2,sizeof(CUS),1,fpointer2)==1){
+
+            // Check if there's a repeat entry with same first and last name and different date (i.e a returning customer)
+            if(strcmp(coustomer.cusFirstName,coustomer2.cusFirstName)==0 && strcmp(coustomer.cusLastName,coustomer2.cusLastName)==0 
+            && coustomer.TD.dd!=coustomer2.TD.dd && coustomer.TD.mm!=coustomer2.TD.mm && coustomer.TD.yy!=coustomer2.TD.yy){
+
+                count++;
+                printf("\nCustomer Name: %s %s\n", coustomer.cusFirstName, coustomer.cusLastName);
+                printf("License plate number: %s\n", coustomer.lisPlatNum);
+                printf("Date of first transaction: %d/%d/%d\n",coustomer.TD.dd,coustomer.TD.mm, coustomer.TD.yy);
+                printf("Service type(s) requested: ");
+
+                // Print the services requested by the customer
+                switch (coustomer.servicesRequired)
+                {
+                case 1:
+                    printf("WashandVacuum\n");
+                    break;
+                case 2:
+                    printf("EngineWash\n");
+                    break;
+                case 3:
+                    printf("Polishing\n");
+                    break;
+                case 4:
+                    printf("Buffing\n");
+                    break;
+                case 5:
+                    printf("RoofCleaning\n");
+                    break;;
+                case 6:
+                    printf("Detailing/InteriorShampooing\n");
+                    break;
                 }
             }
-
-            // If the customer is not a returning customer, print message indicating so
-            if (!isReturningCustomer) {
-                printf("%s %s is NOT a returning customer\n", customer[rear].cusFirstName, customer[rear].cusLastName);
-            }
-
-            rear++; // Increment the index for the next customer
         }
 
-        fclose(fpointer); // Close the file
+        fclose(fpointer2);
+
+    }
+
+    fclose(fpointer);
+
+    // If no returning customers were found, print the message below
+    if(count==0){
+        printf("\nNo returning customers found.\n");
     }
 }
 
