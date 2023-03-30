@@ -8,6 +8,7 @@
 #include<time.h>
 #include<string.h>
 #include<stdlib.h>
+#include<ctype.h>
 
 
 //global variables
@@ -17,6 +18,7 @@ int polishCount = 0;
 int buffCount = 0;
 int roofCount = 0;
 int detailCount = 0;
+int numberofCustomers = 0;
 
 // Define the maximum length of the customer queue to be 23
 #define MAX 23
@@ -78,7 +80,6 @@ int main(void)
 // Function to add new customers to the car wash
 void customerInformation(){
     int tip, tipPercentage, integer;
-    int numberofCustomers = 0;
     float cost, totalCost = 0;
     CUS coustomer;
     CUS *coustomerptr;
@@ -289,7 +290,7 @@ void wash(){
     time_t startTime = time(NULL);
     
     //Starting an infinite loop that will only exit when the user prompts it to
-    while(True&&decide==1&&counter<=23){
+    while(True&&decide==1&&counter<=numberofCustomers){
         
         //Assigning values to the time variables 
         time_t currentTime = time(NULL);
