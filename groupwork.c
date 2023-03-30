@@ -72,6 +72,7 @@ int main(void)
 
 
     customerInformation();
+    searchReturningCustomers();
 }
 
 // Function to add new customers to the car wash
