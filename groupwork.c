@@ -12,13 +12,16 @@
 
 
 //global variables
-int washCount = 0;
-int engineCount = 0;
-int polishCount = 0;
-int buffCount = 0;
-int roofCount = 0;
-int detailCount = 0;
+static float washCount = 0;
+static float engineCount = 0;
+static float polishCount = 0;
+static float buffCount = 0;
+static float roofCount = 0;
+static float detailCount = 0;
+int totalNumberofCustomers = 0;
 int numberofCustomers = 0;
+float tcost = 0;
+float totalTips = 0;
 
 // Define the maximum length of the customer queue to be 23
 #define MAX 23
@@ -74,7 +77,11 @@ int main(void)
 
 
     customerInformation();
+    wash();
     searchReturningCustomers();
+    displaySalesReport();
+
+
 }
 
 // Function to add new customers to the car wash
@@ -155,6 +162,7 @@ void customerInformation(){
                     break;
                 default:
                     printf("Invalid service.\n");
+                    cost = 0;
                     break;
                 }
 
@@ -168,11 +176,10 @@ void customerInformation(){
 
             if(coustomerptr->paymentMethod == 1){
                 printf("payment method: Cash\n");
-                totalCost *= 1;
             }
             else if(coustomerptr->paymentMethod == 2){
                 printf("payment method: Credit\n");
-                totalCost *= 0.03;
+                totalCost = (totalCost * 0.03) + totalCost;
             }
         
 
@@ -194,7 +201,14 @@ void customerInformation(){
                 tipPercentage = 0;
             }   
 
+            float tipAmount = (tipPercentage/100) * totalCost;
+            totalTips += tipAmount;
+
             numberofCustomers++;
+            totalNumberofCustomers++;
+
+            float Tcost = totalCost + tipAmount;
+            tcost += Tcost; 
 
 
             printf("Customer name: %s %s\n", coustomerptr->cusFirstName, coustomerptr->cusLastName);
@@ -202,8 +216,8 @@ void customerInformation(){
             printf("license number: %s\n",coustomerptr->lisPlatNum);
             printf("Total service costs: %.2f\n",totalCost);
             printf("Tip percentage: %d\n", tipPercentage);
-            printf("Tip amount: %.2f\n",tipPercentage * totalCost);
-            printf("Grand total: %.2f\n",totalCost + (tipPercentage * totalCost));
+            printf("Tip amount: %.2f\n",tipAmount);
+            printf("Grand total: %.2f\n",Tcost);
 
 
 
@@ -351,7 +365,7 @@ void wash(){
 
             }
 
-            if(counter==23){
+            if(counter==numberofCustomers){
 
                 printf("All the cars that were waiting to be washed have been washed\n\n");
             }
@@ -380,12 +394,16 @@ void wash(){
 
 
 void displaySalesReport(){
-    printf("service totals\n");
+    printf("\nservice totals\n");
     printf("amount made from wash and vaccum: %.2f\n", washCount * 2500);
     printf("amount made from engine wash: %.2f\n", engineCount * 2000);
     printf("amount made from polishing: %.2f\n", polishCount * 3500);
     printf("amount made from buffing %.2f\n", buffCount * 5500);
     printf("amount made from roof cleaning: %.2f\n", roofCount * 3200);
     printf("amount made from detailing/interior shampooing: %.2f\n", detailCount * 7500);
+
+    printf("Total number of customers: %d\n",totalNumberofCustomers);
+    printf("Total amount earned: %.2f\n",tcost);
+    printf("Total amount earned in tips: %.2f\n",totalTips);
   
 }
